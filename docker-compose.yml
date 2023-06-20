@@ -1,17 +1,29 @@
-#version: "3.7"
-version: "3"
+version: "3.7"
 services:
   web1:
-    build: quote_gen
+    build: ./quote_gen
+    # removing container name to allow multiple containers to be created
     container_name: gen
-    ports:
-      - "5000:5000"
-  web2:
-    build: quote_disp
-    container_name: disp
+    # port 5000 is open on macos by control center so had to choose other port    
     expose:
-      - "5000"
+      - "5050"
     ports:
-      - "5001:5000"
+      - "5050:5050"
+    # deploy:
+    #   replicas: 2
+    #   mode: replicated
+
+  web2:
+    build: ./quote_disp
+    # removing container name to allow multiple containers to be created
+    #container_name: disp
+    expose:
+      - "5051"
+    ports:
+      - "5051:5051"
+      #- "5051"
+      # deploy:
+      #   replicas: 2
+      #   mode: replicated
     depends_on:
       - web1
